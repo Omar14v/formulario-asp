@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -16,21 +19,37 @@ namespace ProyectoClases5M
 
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
-            
-            string varusuario = "Omar";
-            string varcontraseña = "1234";
-            if (txtUsuario.Text==varusuario && txtClave.Text == varcontraseña)
+
+            string varusuario = txtUsuario.Text;
+            string varclave = txtClave.Text;
+
+            using (SqlConnection cn = new SqlConnection(ConfigurationManager.ConnectionStrings["EjerciciosConnectionString"].ToString()))
             {
-                Response.Redirect("Formulario/DatosPersonales.aspx");
-            }else
-            {
-                Response.Write("Usuario o contraseña incorrectas");
+                cn.Open();
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "Select * From USUARIOS Where USRNOMBRE='" + varusuario + "' AND USRCLAVE='" + varclave + "'";
+                cmd.CommandType = CommandType.Text;
+                cmd.Connection = cn;
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    Response.Redirect("Formulario/DatosPersonales.aspx");
+                }
+                else
+                {
+                    Response.Write("Usuario o Contraseña incorrectos");
+
+                }
+
+                cn.Close();
+
             }
-        }
 
-        protected void txtUsuario_TextChanged(object sender, EventArgs e)
-        {
+            
 
         }
+
     }
+
 }

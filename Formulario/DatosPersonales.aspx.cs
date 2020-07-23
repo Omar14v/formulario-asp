@@ -13,5 +13,10 @@ namespace ProyectoClases5M.Formulario
         {
 
         }
+
+        protected void btnAceptar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
